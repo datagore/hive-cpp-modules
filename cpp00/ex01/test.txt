@@ -1,0 +1,24 @@
+ADD
+Aldo
+Raine
+The Apache
+19348591347
+Is a bootlegger
+
+ADD
+Donny
+Donowitz
+The Bear Jew
+04587293808
+Never played baseball
+
+ADD
+Hans
+Landa
+Hans
+29834756987
+Secretly a turncoat
+
+SEARCH
+3
+EXIT
