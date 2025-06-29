@@ -13,8 +13,8 @@ int main(int argc, char **argv)
 	std::string s1 = argv[2];
 	std::string s2 = argv[3];
 
-	// Open the file for reading and writing, at the end of the file.
-	std::fstream file(filename, std::ios::in | std::ios::out | std::ios::ate);
+	// Open the file for reading, starting at the end of the file.
+	std::fstream file(filename, std::ios::in | std::ios::ate);
 	if (!file.is_open()) {
 		std::cout << "error: can't open file: " << filename << std::endl;
 		return 1;
@@ -25,6 +25,14 @@ int main(int argc, char **argv)
 	file.seekg(0);
 	if (!file.read(contents.data(), contents.size())) {
 		std::cout << "error: can't read file: " << filename << std::endl;
+		return 1;
+	}
+
+	// Reopen the file for writing, truncating the file contents.
+	file.close();
+	file.open(filename, std::ios::out | std::ios::trunc);
+	if (!file.is_open()) {
+		std::cout << "error: can't open file: " << filename << std::endl;
 		return 1;
 	}
 

@@ -28,3 +28,4 @@ test: all
 
 .SECONDARY: $(OBJ)
 .PHONY: all clean fclean re test
+.SILENT: test
