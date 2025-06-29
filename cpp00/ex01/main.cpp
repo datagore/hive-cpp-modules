@@ -18,22 +18,22 @@ std::string promptString(const char *prompt)
 
 int promptNumber(const char *prompt, int minValue, int maxValue)
 {
-	int index = 0;
-	while (index < minValue || index > maxValue) {
+	int index;
+	do {
 		std::string input = promptString(prompt);
 		index = std::strtol(input.data(), nullptr, 10);
-	}
+	} while (index < minValue || index > maxValue);
 	return index;
 }
 
 void addContact(PhoneBook& phoneBook)
 {
 	Contact newContact;
-	newContact.setFirstName(promptString("Please enter a first name"));
-	newContact.setLastName(promptString("Please enter a last name"));
-	newContact.setNickname(promptString("Please enter a nickname"));
-	newContact.setPhoneNumber(promptString("Please enter a phone number"));
-	newContact.setDarkestSecret(promptString("Please enter a darkest secret"));
+	newContact.setFirstName(promptString("Enter a first name"));
+	newContact.setLastName(promptString("Enter a last name"));
+	newContact.setNickname(promptString("Enter a nickname"));
+	newContact.setPhoneNumber(promptString("Enter a phone number"));
+	newContact.setDarkestSecret(promptString("Enter a darkest secret"));
 	phoneBook.addContact(newContact);
 }
 
@@ -60,7 +60,7 @@ void showAllContacts(const PhoneBook& phoneBook)
 
 void showContactDetails(const PhoneBook& phoneBook)
 {
-	int index = promptNumber("Please enter a number between 1 and 8", 1, 8);
+	int index = promptNumber("Enter a number between 1 and 8", 1, 8);
 	const Contact& contact = phoneBook.getContact(index);
 	std::cout << "First name: " << contact.getFirstName() << std::endl;
 	std::cout << "Last name: " << contact.getLastName() << std::endl;
@@ -74,7 +74,7 @@ int main()
 	PhoneBook phoneBook;
 	std::string input;
 	while (input != "EXIT") {
-		input = promptString("Please enter ADD, SEARCH, or EXIT");
+		input = promptString("Enter ADD, SEARCH, or EXIT");
 		if (input == "ADD") {
 			addContact(phoneBook);
 		} else if (input == "SEARCH") {

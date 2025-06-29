@@ -3,7 +3,7 @@ Aldo
 Raine
 The Apache
 19348591347
-Is a bootlegger
+Secret bootlegger
 
 ADD
 Donny
@@ -17,8 +17,8 @@ Hans
 Landa
 Hans
 29834756987
-Secretly a turncoat
+Divided loyalties
 
 SEARCH
-3
+2
 EXIT
