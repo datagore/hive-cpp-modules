@@ -2,7 +2,7 @@ NAME := zombie
 HEADERS := Zombie.hpp
 SRC := main.cpp Zombie.cpp newZombie.cpp randomChump.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -Wall -Wextra -Werror
+CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
 
 all: $(NAME)
 

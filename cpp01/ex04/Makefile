@@ -2,7 +2,7 @@ NAME := replace
 HEADERS :=
 SRC := main.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -Wall -Wextra -Werror
+CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
 
 all: $(NAME)
 
