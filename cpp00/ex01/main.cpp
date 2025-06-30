@@ -62,11 +62,15 @@ void showContactDetails(const PhoneBook& phoneBook)
 {
 	int index = promptNumber("Enter a number between 1 and 8", 1, 8);
 	const Contact& contact = phoneBook.getContact(index);
-	std::cout << "First name: " << contact.getFirstName() << std::endl;
-	std::cout << "Last name: " << contact.getLastName() << std::endl;
-	std::cout << "Nickname: " << contact.getNickname() << std::endl;
-	std::cout << "Phone number: " << contact.getPhoneNumber() << std::endl;
-	std::cout << "Darkest secret: " << contact.getDarkestSecret() << std::endl;
+	if (contact.getFirstName().empty()) {
+		std::cout << "No such contact!\n";
+	} else {
+		std::cout << "First name: " << contact.getFirstName() << "\n";
+		std::cout << "Last name: " << contact.getLastName() << "\n";
+		std::cout << "Nickname: " << contact.getNickname() << "\n";
+		std::cout << "Phone number: " << contact.getPhoneNumber() << "\n";
+		std::cout << "Darkest secret: " << contact.getDarkestSecret() << "\n";
+	}
 }
 
 int main()
