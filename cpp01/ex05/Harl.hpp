@@ -13,6 +13,7 @@ public:
 	void complain(std::string level);
 
 private:
+	static int getLogLevel(const std::string& level);
 	void debug(void);
 	void info(void);
 	void warning(void);

@@ -20,17 +20,33 @@ Harl& Harl::operator=(const Harl&)
 	return *this;
 }
 
-void Harl::complain(std::string level)
+void Harl::complain(std::string levelName)
 {
-	static const std::pair<std::string, void (Harl::*)(void)> functions[] = {
-		{"DEBUG",    &Harl::debug},
-		{"INFO",     &Harl::info},
-		{"WARNING",  &Harl::warning},
-		{"ERROR",    &Harl::error},
+	typedef void (Harl::*Function)(void);
+	static const Function functions[] = {
+		&Harl::debug,
+		&Harl::info,
+		&Harl::warning,
+		&Harl::error,
 	};
-	for (auto& [name, function]: functions)
-		if (level == name)
-			return (*this.*function)();
+	int level = getLogLevel(levelName);
+	if (level != -1)
+		(*this.*functions[level])();
+}
+
+int Harl::getLogLevel(const std::string& level)
+{
+	static const std::string levelNames[] = {
+		"DEBUG",
+		"INFO",
+		"WARNING",
+		"ERROR",
+	};
+	const int numLevels = sizeof(levelNames) / sizeof(*levelNames);
+	for (int i = 0; i < numLevels; i++)
+		if (level == levelNames[i])
+			return i;
+	return -1;
 }
 
 void Harl::debug(void)
