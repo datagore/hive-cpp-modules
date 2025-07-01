@@ -1,24 +1,29 @@
 NAME := zombie
-HEADERS := Zombie.hpp
 SRC := main.cpp Zombie.cpp newZombie.cpp randomChump.cpp
-OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -std=c++20 -Wall -Wextra -Werror
+
+CXXFLAGS := -Wall -Wextra -Werror -std=c++20 -MMD -MP
+OBJ := $(SRC:%.cpp=.build/%.o)
+DEP := $(SRC:%.cpp=.build/%.d)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	c++ $^ -o $@
 
-%.o: %.cpp $(HEADERS)
+.build/%.o: %.cpp | .build
 	c++ -c $< -o $@ $(CXXFLAGS)
 
+.build:
+	mkdir -p $@
+
 clean:
-	rm -f $(OBJ)
+	rm -rf .build
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-.SECONDARY: $(OBJ)
 .PHONY: all clean fclean re
+.SECONDARY: $(OBJ) $(DEP) .build
+-include $(DEP)
