@@ -1,2 +1,2 @@
-ex00/fixed
-*.o
+.build/
+a.out
