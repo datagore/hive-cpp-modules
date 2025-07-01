@@ -2,7 +2,7 @@ NAME := harl
 HEADERS := Harl.hpp
 SRC := main.cpp Harl.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
+CXXFLAGS := -std=c++20 -Wall -Wextra -Werror
 
 all: $(NAME)
 

@@ -2,7 +2,7 @@ NAME := phonebook
 HEADERS := PhoneBook.hpp Contact.hpp
 SRC := main.cpp PhoneBook.cpp Contact.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
+CXXFLAGS := -std=c++20 -Wall -Wextra -Werror
 
 all: $(NAME)
 

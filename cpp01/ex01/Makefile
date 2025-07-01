@@ -2,7 +2,7 @@ NAME := horde
 HEADERS := Zombie.hpp
 SRC := main.cpp Zombie.cpp zombieHorde.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
+CXXFLAGS := -std=c++20 -Wall -Wextra -Werror
 
 all: $(NAME)
 

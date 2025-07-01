@@ -2,7 +2,7 @@ NAME := account
 HEADERS := Account.hpp
 SRC := tests.cpp Account.cpp
 OBJ := $(SRC:%.cpp=%.o)
-CXXFLAGS := -Wall -Wextra -Werror -Wno-deprecated-declarations
+CXXFLAGS := -std=c++20 -Wall -Wextra -Werror -Wno-deprecated-declarations
 
 all: $(NAME)
 
