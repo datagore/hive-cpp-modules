@@ -84,12 +84,16 @@ bool Fixed::operator!=(const Fixed& other) const
 
 Fixed Fixed::operator+(const Fixed& other) const
 {
-	return Fixed(rawBits + other.rawBits);
+	Fixed sum;
+	sum.setRawBits(rawBits + other.rawBits);
+	return sum;
 }
 
 Fixed Fixed::operator-(const Fixed& other) const
 {
-	return Fixed(rawBits - other.rawBits);
+	Fixed difference;
+	difference.setRawBits(rawBits - other.rawBits);
+	return difference;
 }
 
 Fixed Fixed::operator*(const Fixed& other) const

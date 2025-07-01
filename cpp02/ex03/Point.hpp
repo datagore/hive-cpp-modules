@@ -12,6 +12,8 @@ public:
 	Point& operator=(const Point& other);
 	Point(const float x, const float y);
 
+	static Fixed wedge(const Point& a, const Point& b, const Point& c);
+
 private:
 	Fixed const x;
 	Fixed const y;
