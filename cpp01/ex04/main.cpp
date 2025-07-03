@@ -30,14 +30,13 @@ int main(int argc, char **argv)
 
 	// Reopen the file for writing, truncating the file contents.
 	file.close();
-	file.open(filename, std::ios::out | std::ios::trunc);
+	file.open(filename + ".replace", std::ios::out | std::ios::trunc);
 	if (!file.is_open()) {
 		std::cout << "error: can't open file: " << filename << std::endl;
 		return 1;
 	}
 
 	// Replace every occurrence of s1 with s2.
-	file.seekp(0);
 	size_t pos = 0;
 	if (!s1.empty()) {
 		while (pos < contents.length()) {

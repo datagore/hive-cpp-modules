@@ -25,10 +25,9 @@ fclean: clean
 re: fclean all
 
 test: all
-	@cp main.cpp copy.cpp
-	@./$(NAME) copy.cpp "std::" "REDACTED::"
-	@cat copy.cpp
-	@rm copy.cpp
+	@./$(NAME) main.cpp "std::" "REDACTED::"
+	@cat main.cpp.replace
+	@rm main.cpp.replace
 
 .PHONY: all clean fclean re test
 .SECONDARY: $(OBJ) $(DEP) .build
