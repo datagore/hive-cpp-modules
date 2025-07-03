@@ -1,16 +1,20 @@
 NAME := FragTrap
-SRC := main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
+SRC := \
+	src/ClapTrap.cpp \
+	src/FragTrap.cpp \
+	src/ScavTrap.cpp \
+	src/main.cpp \
 
-CXXFLAGS := -Wall -Wextra -Werror -std=c++20 -MMD -MP
-OBJ := $(SRC:%.cpp=.build/%.o)
-DEP := $(SRC:%.cpp=.build/%.d)
+CXXFLAGS := -Wall -Wextra -Werror -Iinc -std=c++20 -MMD -MP
+OBJ := $(SRC:src/%.cpp=.build/%.o)
+DEP := $(SRC:src/%.cpp=.build/%.d)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	c++ $^ -o $@
 
-.build/%.o: %.cpp | .build
+.build/%.o: src/%.cpp | .build
 	c++ -c $< -o $@ $(CXXFLAGS)
 
 .build:
