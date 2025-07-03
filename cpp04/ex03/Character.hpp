@@ -16,9 +16,17 @@ public:
 	void use(int slot, ICharacter& target);
 
 private:
-	enum {NUM_MATERIA_SLOTS = 4};
+	struct Dropped
+	{
+		Dropped* next;
+		AMateria* materia;
+	};
+	void dropMateria(AMateria* materia);
+
+	enum {INVENTORY_SIZE = 4};
 	std::string name;
-	AMateria* equipped[NUM_MATERIA_SLOTS];
+	AMateria* inventory[INVENTORY_SIZE];
+	Dropped* dropped;
 };
 
 #endif // #ifndef CHARACTER_HPP

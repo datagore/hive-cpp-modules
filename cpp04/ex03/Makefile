@@ -1,5 +1,11 @@
 NAME := a.out
-SRC := main.cpp AMateria.cpp Ice.cpp Cure.cpp
+SRC := \
+	AMateria.cpp \
+	Character.cpp \
+	Cure.cpp \
+	Ice.cpp \
+	MateriaSource.cpp \
+	main.cpp \
 
 CXXFLAGS := -Wall -Wextra -Werror -std=c++20 -MMD -MP
 OBJ := $(SRC:%.cpp=.build/%.o)
