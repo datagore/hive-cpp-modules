@@ -68,3 +68,13 @@ void ClapTrap::beRepaired(unsigned int amount)
 		std::cout << " points\n";
 	}
 }
+
+ClapTrap::ClapTrap(const std::string& name, unsigned int hitPoints,
+				   unsigned int energyPoints, unsigned int attackDamage)
+	: name(name),
+	  hitPoints(hitPoints),
+	  energyPoints(energyPoints),
+	  attackDamage(attackDamage)
+{
+	std::cout << "ClapTrap " << name << " appars out of nowhere\n";
+}
