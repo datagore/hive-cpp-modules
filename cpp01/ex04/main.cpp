@@ -21,14 +21,14 @@ int main(int argc, char **argv)
 	}
 
 	// Read the contents of the whole file into a string.
-	std::string contents(file.tellg(), 0);
+	std::string input(file.tellg(), 0);
 	file.seekg(0);
-	if (!file.read(contents.data(), contents.size())) {
+	if (!file.read(input.data(), input.size())) {
 		std::cout << "error: can't read file: " << filename << std::endl;
 		return 1;
 	}
 
-	// Reopen the file for writing, truncating the file contents.
+	// Open the output file, truncating any existing file contents.
 	file.close();
 	file.open(filename + ".replace", std::ios::out | std::ios::trunc);
 	if (!file.is_open()) {
@@ -36,18 +36,24 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	// Replace every occurrence of s1 with s2.
-	size_t pos = 0;
+	// Find occurrences of s1 in the input.
 	if (!s1.empty()) {
-		while (pos < contents.length()) {
-			size_t found = contents.find(s1, pos);
-			if (found != contents.npos) {
-				file.write(contents.data() + pos, found - pos);
+		size_t pos = 0;
+		while (pos < input.length()) {
+			size_t found = input.find(s1, pos);
+
+			// When s1 is found in the input, write everything up to that point
+			// to the output, and then write s2 instead of s1.
+			if (found != input.npos) {
+				file.write(input.data() + pos, found - pos);
 				file.write(s2.data(), s2.length());
 				pos = found + s1.length();
+
+			// If s1 couldn't be found, write the rest of the input directly to
+			// the output.
 			} else {
-				file.write(contents.data() + pos, contents.length() - pos);
-				pos = contents.length();
+				file.write(input.data() + pos, input.length() - pos);
+				pos = input.length();
 			}
 		}
 	}
