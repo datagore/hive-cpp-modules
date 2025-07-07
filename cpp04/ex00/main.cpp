@@ -7,29 +7,33 @@
 void testAnimals()
 {
 	std::cout << "===== Animal tests =====\n";
-	Dog dog;
-	Cat cat;
-	Animal& catAnimal = cat;
-	Animal& dogAnimal = dog;
-	cat.makeSound();
-	dog.makeSound();
-	catAnimal.makeSound();
-	dogAnimal.makeSound();
-	std::cout << "dogAnimal type: " << dogAnimal.getType() << "\n";
-	std::cout << "catAnimal type: " << catAnimal.getType() << "\n";
+	Animal *animal = new Animal();
+	Dog* dog = new Dog();
+	Cat* cat = new Cat();
+	animal->makeSound();
+	dog->makeSound();
+	cat->makeSound();
+	std::cout << "dog type: " << dog->getType() << "\n";
+	std::cout << "cat type: " << cat->getType() << "\n";
+	delete animal;
+	delete dog;
+	delete cat;
 }
 
 void testWrongCat()
 {
 	std::cout << "\n===== WrongCat tests =====\n";
-	WrongCat wrongCat;
-	WrongAnimal& wrongAnimal = wrongCat;
-	wrongCat.makeSound();
-	wrongAnimal.makeSound();
+	WrongAnimal *wrongCat = new WrongCat();
+	wrongCat->makeSound();
+	delete wrongCat;
 }
 
 int main()
 {
-	testAnimals();
-	testWrongCat();
+	try {
+		testAnimals();
+		testWrongCat();
+	} catch (std::exception& exception) {
+		std::cout << exception.what() << std::endl;
+	}
 }
