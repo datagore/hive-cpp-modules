@@ -15,26 +15,29 @@ Brain::~Brain()
 Brain::Brain(const Brain& other)
 {
 	std::cout << "Brain copy constructor\n";
-	for (int i = 0; i < NUM_THOUGHTS; i++)
-		thoughts[i] = other.thoughts[i];
+	for (int i = 0; i < NUM_IDEAS; i++)
+		ideas[i] = other.ideas[i];
 }
 
 Brain& Brain::operator=(const Brain& other)
 {
 	if (this != &other) {
 		std::cout << "Brain copy assignment\n";
-		for (int i = 0; i < NUM_THOUGHTS; i++)
-			thoughts[i] = other.thoughts[i];
+		for (int i = 0; i < NUM_IDEAS; i++)
+			ideas[i] = other.ideas[i];
 	}
 	return *this;
 }
 
-const std::string& Brain::getThought(int index) const
+std::string Brain::getIdea(int index) const
 {
-	return thoughts[index];
+	if (index < 0 || index >= NUM_IDEAS)
+		return "";
+	return ideas[index];
 }
 
-void Brain::setThought(int index, const std::string& thought)
+void Brain::setIdea(int index, const std::string& idea)
 {
-	thoughts[index] = thought;
+	if (0 <= index && index < NUM_IDEAS)
+		ideas[index] = idea;
 }

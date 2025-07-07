@@ -11,12 +11,12 @@ public:
 	Brain(const Brain& other);
 	Brain& operator=(const Brain& other);
 
-	enum {NUM_THOUGHTS = 100};
-	const std::string& getThought(int index) const;
-	void setThought(int index, const std::string& thought);
+	std::string getIdea(int index) const;
+	void setIdea(int index, const std::string& idea);
+	enum {NUM_IDEAS = 100};
 
 private:
-	std::string thoughts[NUM_THOUGHTS];
+	std::string ideas[NUM_IDEAS];
 };
 
 #endif // #ifndef BRAIN_HPP

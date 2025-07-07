@@ -2,11 +2,12 @@
 
 #include "Cat.hpp"
 #include "Dog.hpp"
+#include "WrongCat.hpp"
 
-void testArray()
+void arrayTest()
 {
-	std::cout << "===== Array test =====\n";
-	Animal *animals[6];
+	std::cout << "===== ARRAY TEST =====\n";
+	Animal* animals[6];
 	for (int i = 0; i < 3; i++)
 		animals[i] = new Dog();
 	for (int i = 3; i < 6; i++)
@@ -15,18 +16,22 @@ void testArray()
 		delete animals[i];
 }
 
-void testDeepCopy()
+void deepCopyTest()
 {
-	std::cout << "\n===== Deep copy test =====\n";
-	Dog firstDog;
-	Dog secondDog = firstDog;
-	firstDog.getBrain().setThought(0, "CHASING CARS");
-	std::cout << firstDog.getBrain().getThought(0) << std::endl;
-	std::cout << secondDog.getBrain().getThought(0) << std::endl;
+	std::cout << "\n===== ARRAY TEST =====\n";
+	Dog dog1;
+	Dog dog2(dog1);
+	dog1.getBrain().setIdea(0, "CHASING CARS");
+	std::cout << "dog1 is thinking of " << dog1.getBrain().getIdea(0) << "\n";
+	std::cout << "dog2 is thinking of " << dog2.getBrain().getIdea(0) << "\n";
 }
 
 int main()
 {
-	testArray();
-	testDeepCopy();
+	try {
+		arrayTest();
+		deepCopyTest();
+	} catch (std::exception& exception) {
+		std::cout << exception.what() << std::endl;
+	}
 }

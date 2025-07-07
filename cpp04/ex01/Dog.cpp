@@ -7,14 +7,14 @@ Dog::Dog()
 	  brain(new Brain())
 {
 	std::cout << "Dog constructor\n";
-	for (int i = 0; i < Brain::NUM_THOUGHTS; i++)
-		brain->setThought(i, "DOG TREATS");
+	for (int i = 0; i < Brain::NUM_IDEAS; i++)
+		brain->setIdea(i, "DOG TREATS");
 }
 
 Dog::~Dog()
 {
-	delete brain;
 	std::cout << "Dog destructor\n";
+	delete brain;
 }
 
 Dog::Dog(const Dog& other)
