@@ -13,6 +13,12 @@ int main(int argc, char **argv)
 	std::string s1 = argv[2];
 	std::string s2 = argv[3];
 
+	// Don't allow s1 to be empty.
+	if (s1.empty()) {
+		std::cout << "error: s1 can't be empty\n";
+		return 1;
+	}
+
 	// Open the file for reading, starting at the end of the file.
 	std::fstream file(filename, std::ios::in | std::ios::ate);
 	if (!file.is_open()) {
@@ -37,24 +43,22 @@ int main(int argc, char **argv)
 	}
 
 	// Find occurrences of s1 in the input.
-	if (!s1.empty()) {
-		size_t pos = 0;
-		while (pos < input.length()) {
-			size_t found = input.find(s1, pos);
+	size_t pos = 0;
+	while (pos < input.length()) {
+		size_t found = input.find(s1, pos);
 
-			// When s1 is found in the input, write everything up to that point
-			// to the output, and then write s2 instead of s1.
-			if (found != input.npos) {
-				file.write(input.data() + pos, found - pos);
-				file.write(s2.data(), s2.length());
-				pos = found + s1.length();
+		// When s1 is found in the input, write everything up to that point
+		// to the output, and then write s2 instead of s1.
+		if (found != input.npos) {
+			file.write(input.data() + pos, found - pos);
+			file.write(s2.data(), s2.length());
+			pos = found + s1.length();
 
-			// If s1 couldn't be found, write the rest of the input directly to
-			// the output.
-			} else {
-				file.write(input.data() + pos, input.length() - pos);
-				pos = input.length();
-			}
+		// If s1 couldn't be found, write the rest of the input directly to
+		// the output.
+		} else {
+			file.write(input.data() + pos, input.length() - pos);
+			pos = input.length();
 		}
 	}
 }
