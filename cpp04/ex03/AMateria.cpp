@@ -37,3 +37,7 @@ void AMateria::use(ICharacter& target)
 {
 	std::cout << "AMateria used on character " << target.getName() << "\n";
 }
+
+AMateria::AMateria()
+{
+}

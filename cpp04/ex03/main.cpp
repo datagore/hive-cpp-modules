@@ -5,7 +5,7 @@
 #include "Ice.hpp"
 #include "MateriaSource.hpp"
 
-int main()
+void runTests()
 {
 	std::cout << "\n===== MATERIA SOURCE CREATION =====\n";
 	IMateriaSource* materiaSource = new MateriaSource();
@@ -26,11 +26,11 @@ int main()
 	character->use(-1, *character); // Invalid slot number.
 
 	std::cout << "\n===== INVENTORY OVERFLOW TEST =====\n";
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++) // Add too many materias.
 		character->equip(materiaSource->createMateria("ice"));
 
 	std::cout << "\n===== MATERIA SOURCE OVERFLOW TEST =====\n";
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++) // Learn too many materias.
 		materiaSource->learnMateria(new Cure());
 
 	std::cout << "\n===== CHARACTER DESTRUCTION =====\n";
@@ -39,4 +39,13 @@ int main()
 	std::cout << "\n===== MATERIA SOURCE DESTRUCTION =====\n";
 	delete materiaSource;
 	std::cout << "\n";
+}
+
+int main()
+{
+	try {
+		runTests();
+	} catch (std::exception& exception) {
+		std::cout << exception.what() << std::endl;
+	}
 }

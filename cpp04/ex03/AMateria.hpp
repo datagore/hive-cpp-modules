@@ -17,6 +17,7 @@ public:
 	virtual void use(ICharacter& target);
 
 protected:
+	AMateria();
 	std::string type;
 };
 
