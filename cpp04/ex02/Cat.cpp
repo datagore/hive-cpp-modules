@@ -7,14 +7,14 @@ Cat::Cat()
 	  brain(new Brain())
 {
 	std::cout << "Cat constructor\n";
-	for (int i = 0; i < Brain::NUM_THOUGHTS; i++)
-		brain->setThought(i, "CAT TREATS");
+	for (int i = 0; i < Brain::NUM_IDEAS; i++)
+		brain->setIdea(i, "CAT TREATS");
 }
 
 Cat::~Cat()
 {
-	delete brain;
 	std::cout << "Cat destructor\n";
+	delete brain;
 }
 
 Cat::Cat(const Cat& other)
