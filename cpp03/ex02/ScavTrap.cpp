@@ -2,6 +2,11 @@
 
 #include "ScavTrap.hpp"
 
+ScavTrap::ScavTrap()
+	: ScavTrap("ScavTrap")
+{
+}
+
 ScavTrap::ScavTrap(const std::string& name)
 	: ClapTrap(name, 100, 50, 20)
 {

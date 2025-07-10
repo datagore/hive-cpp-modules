@@ -2,12 +2,20 @@
 
 #include "DiamondTrap.hpp"
 
+DiamondTrap::DiamondTrap()
+	: DiamondTrap("DiamondTrap")
+{
+}
+
 DiamondTrap::DiamondTrap(const std::string& name)
-	: ClapTrap(name + "_clap_name", 100, 50, 30),
-	  FragTrap(name + "_clap_name"),
-	  ScavTrap(name + "_clap_name"),
+	: ClapTrap(name + "_clap_name"),
+	  FragTrap(ClapTrap::name),
+	  ScavTrap(ClapTrap::name),
 	  name(name)
 {
+	hitPoints = FragTrap::hitPoints;
+	energyPoints = ScavTrap::energyPoints;
+	attackDamage = FragTrap::attackDamage;
 	std::cout << "DiamondTrap " << name << " appears out of nowhere\n";
 }
 
@@ -18,8 +26,8 @@ DiamondTrap::~DiamondTrap()
 
 DiamondTrap::DiamondTrap(const DiamondTrap& d)
 	: ClapTrap(d.name + "_clap_name", d.hitPoints, d.energyPoints, d.attackDamage),
-	  FragTrap(d.name + "_clap_name"),
-	  ScavTrap(d.name + "_clap_name"),
+	  FragTrap(ClapTrap::name),
+	  ScavTrap(ClapTrap::name),
 	  name(d.name)
 {
 	std::cout << "A clone of DiamondTrap " << name << " appears\n";
@@ -28,6 +36,9 @@ DiamondTrap::DiamondTrap(const DiamondTrap& d)
 DiamondTrap& DiamondTrap::operator=(const DiamondTrap& other)
 {
 	if (this != &other) {
+		ClapTrap::operator=(other);
+		ScavTrap::operator=(other);
+		FragTrap::operator=(other);
 		std::cout << "DiamondTrap " << name << " turns into a clone of ";
 		std::cout << other.name << "\n";
 		name = other.name;

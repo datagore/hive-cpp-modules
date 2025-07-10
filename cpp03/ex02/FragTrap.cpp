@@ -2,6 +2,11 @@
 
 #include "FragTrap.hpp"
 
+FragTrap::FragTrap()
+	: FragTrap("FragTrap")
+{
+}
+
 FragTrap::FragTrap(const std::string& name)
 	: ClapTrap(name, 100, 100, 30)
 {

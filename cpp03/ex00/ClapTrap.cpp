@@ -2,6 +2,11 @@
 
 #include "ClapTrap.hpp"
 
+ClapTrap::ClapTrap()
+	: ClapTrap("ClapTrap")
+{
+}
+
 ClapTrap::ClapTrap(const std::string& name)
 	: name(name),
 	  hitPoints(10),
