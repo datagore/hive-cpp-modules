@@ -6,5 +6,9 @@ int main()
 	monster.attack("Charlie"); // ClapTrap method.
 	monster.guardGate(); // ScavTrap method.
 	monster.highFivesGuys(); // FragTrap method.
-	monster.whoAmI();
+	monster.whoAmI(); // DiamondTrap method.
+	for (int i = 0; i < 4; i++) {
+		monster.takeDamage(33);
+		monster.attack("Bob");
+	}
 }

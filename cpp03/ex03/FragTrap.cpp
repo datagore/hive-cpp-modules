@@ -34,5 +34,9 @@ FragTrap& FragTrap::operator=(const FragTrap& other)
 
 void FragTrap::highFivesGuys(void)
 {
-	std::cout << "FragTrap " << name << " requests high fives\n";
+	if (hitPoints == 0) {
+		std::cout << "FragTrap " << name << " is too dead to request high fives\n";
+	} else {
+		std::cout << "FragTrap " << name << " requests high fives\n";
+	}
 }
