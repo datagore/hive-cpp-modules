@@ -24,6 +24,9 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+test: all
+	bash test.sh | less -R
+
+.PHONY: all clean fclean re test
 .SECONDARY: $(OBJ) $(DEP) .build
 -include $(DEP)
