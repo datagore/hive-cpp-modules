@@ -8,11 +8,8 @@ FragTrap::FragTrap()
 }
 
 FragTrap::FragTrap(const std::string& name)
-	: ClapTrap(name)
+	: ClapTrap(name, 100, 100, 30)
 {
-	hitPoints = 100;
-	energyPoints = 100;
-	attackDamage = 30;
 	std::cout << "FragTrap " << name << " appears out of nowhere\n";
 }
 
