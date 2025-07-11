@@ -10,7 +10,7 @@ public:
 	~Cat();
 	Cat(const Cat& other);
 	Cat& operator=(const Cat& other);
-	void makeSound();
+	void makeSound() const;
 };
 
 #endif //#ifndef CAT_HPP

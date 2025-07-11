@@ -10,7 +10,7 @@ public:
 	~WrongCat();
 	WrongCat(const WrongCat& other);
 	WrongCat& operator=(const WrongCat& other);
-	void makeSound();
+	void makeSound() const;
 };
 
 #endif // #ifndef WRONGCAT_HPP

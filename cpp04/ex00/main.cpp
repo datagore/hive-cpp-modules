@@ -7,9 +7,9 @@
 void testAnimals()
 {
 	std::cout << "===== Animal tests =====\n";
-	Animal *animal = new Animal();
-	Dog* dog = new Dog();
-	Cat* cat = new Cat();
+	const Animal *animal = new Animal();
+	const Dog* dog = new Dog();
+	const Cat* cat = new Cat();
 	animal->makeSound();
 	dog->makeSound();
 	cat->makeSound();
