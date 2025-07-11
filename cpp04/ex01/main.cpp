@@ -18,7 +18,7 @@ void arrayTest()
 
 void deepCopyTest()
 {
-	std::cout << "\n===== ARRAY TEST =====\n";
+	std::cout << "\n===== DEEP COPY TEST =====\n";
 	Dog dog1;
 	Dog dog2(dog1);
 	dog1.getBrain().setIdea(0, "CHASING CARS");
