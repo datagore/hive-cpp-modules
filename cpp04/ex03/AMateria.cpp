@@ -13,21 +13,6 @@ AMateria::~AMateria()
 	std::cout << "AMateria destructor with type " << type << "\n";
 }
 
-AMateria::AMateria(const AMateria& other)
-	: type(other.type)
-{
-	std::cout << "AMateria copy constructor with type " << type << "\n";
-}
-
-AMateria& AMateria::operator=(const AMateria& other)
-{
-	if (this != &other) {
-		type = other.type;
-		std::cout << "AMateria copy assignment with type " << type << "\n";
-	}
-	return *this;
-}
-
 const std::string& AMateria::getType() const
 {
 	return type;

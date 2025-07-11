@@ -10,8 +10,8 @@ class AMateria
 public:
 	virtual ~AMateria();
 	AMateria(const std::string& type);
-	AMateria(const AMateria& other);
-	AMateria& operator=(const AMateria& other);
+	AMateria(const AMateria& other) = delete;
+	AMateria& operator=(const AMateria& other) = delete;
 	const std::string& getType() const;
 	virtual AMateria* clone() const = 0;
 	virtual void use(ICharacter& target);
