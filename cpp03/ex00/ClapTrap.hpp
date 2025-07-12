@@ -16,7 +16,7 @@ public:
 	void takeDamage(unsigned int amount);
 	void beRepaired(unsigned int amount);
 
-protected:
+private:
 	ClapTrap(const std::string& name,
 			 unsigned int hitPoints,
 			 unsigned int energyPoints,
