@@ -15,14 +15,6 @@ Bureaucrat::Bureaucrat(const Bureaucrat& other)
 {
 }
 
-Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
-{
-    if (this != &other) {
-        checkGrade(grade = other.grade);
-    }
-    return *this;
-}
-
 Bureaucrat::Bureaucrat(const std::string& name, int grade)
     : name(name),
       grade(checkGrade(grade))
