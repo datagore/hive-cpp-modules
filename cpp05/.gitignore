@@ -1,3 +1,4 @@
 test
 *.d
 *.o
+*_shrubbery
