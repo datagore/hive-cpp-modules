@@ -1,16 +1,10 @@
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 
-Form::Form()
-    : Form("Blank form", 150, 150)
-{
-}
-
 Form::Form(const std::string& name, int signGrade, int execGrade)
     : name(name),
       signGrade(checkGrade(signGrade)),
-      execGrade(checkGrade(execGrade)),
-      isSigned(false)
+      execGrade(checkGrade(execGrade))
 {
 }
 

@@ -7,7 +7,7 @@
 class Bureaucrat
 {
 public:
-    Bureaucrat();
+    Bureaucrat() = default;
     ~Bureaucrat() = default;
     Bureaucrat(const Bureaucrat&) = default;
     Bureaucrat& operator=(const Bureaucrat&) = delete;

@@ -9,7 +9,7 @@ class Bureaucrat;
 class Form
 {
 public:
-    Form();
+    Form() = default;
     ~Form() = default;
     Form(const Form&) = default;
     Form& operator=(const Form&) = delete;
@@ -36,10 +36,10 @@ private:
 
     static int checkGrade(int grade);
 
-    const std::string name;
-    const int signGrade;
-    const int execGrade;
-    bool isSigned;
+    const std::string name = "Blank form";
+    const int signGrade = 150;
+    const int execGrade = 150;
+    bool isSigned = false;
 };
 
 std::ostream& operator<<(std::ostream& stream, const Form& form);
