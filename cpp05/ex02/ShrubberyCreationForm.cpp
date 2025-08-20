@@ -8,7 +8,7 @@ ShrubberyCreationForm::ShrubberyCreationForm(const std::string& target)
 {
 }
 
-void ShrubberyCreationForm::execute(const Bureaucrat& executor)
+void ShrubberyCreationForm::execute(const Bureaucrat& executor) const
 {
     checkRequirements(executor);
     std::ofstream file(target + "_shrubbery", std::ios::out | std::ios::trunc);

@@ -18,7 +18,7 @@ public:
     bool getSigned() const;
 
     void beSigned(const Bureaucrat& signer);
-    virtual void execute(const Bureaucrat& executor) = 0;
+    virtual void execute(const Bureaucrat& executor) const = 0;
 
     struct GradeTooHighException: public std::runtime_error
     {

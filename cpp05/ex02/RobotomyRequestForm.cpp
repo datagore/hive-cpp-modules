@@ -9,7 +9,7 @@ RobotomyRequestForm::RobotomyRequestForm(const std::string& target)
 {
 }
 
-void RobotomyRequestForm::execute(const Bureaucrat& executor)
+void RobotomyRequestForm::execute(const Bureaucrat& executor) const
 {
     checkRequirements(executor);
     std::random_device device;

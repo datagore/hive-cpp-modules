@@ -10,7 +10,7 @@ public:
     RobotomyRequestForm(const RobotomyRequestForm&) = default;
     RobotomyRequestForm& operator=(const RobotomyRequestForm&) = delete;
     explicit RobotomyRequestForm(const std::string& target);
-    void execute(const Bureaucrat& executor) override;
+    void execute(const Bureaucrat& executor) const override;
 
 private:
     std::string target;
