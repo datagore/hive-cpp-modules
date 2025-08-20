@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <iostream>
 
 #include "Bureaucrat.hpp"
@@ -37,6 +38,7 @@ int main()
             bureaucrat.signForm(*form);
             bureaucrat.executeForm(*form);
         }
+        std::filesystem::remove("Garden_shrubbery");
         delete form;
     });
 
