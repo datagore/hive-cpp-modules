@@ -7,32 +7,32 @@
 class Bureaucrat
 {
 public:
-	Bureaucrat();
-	~Bureaucrat();
-	Bureaucrat(const Bureaucrat&);
-	Bureaucrat& operator=(const Bureaucrat&);
-	Bureaucrat(const std::string& name, int grade);
+    Bureaucrat();
+    ~Bureaucrat();
+    Bureaucrat(const Bureaucrat&);
+    Bureaucrat& operator=(const Bureaucrat&);
+    Bureaucrat(const std::string& name, int grade);
 
-	const std::string& getName() const;
-	int getGrade() const;
-	void incrementGrade();
-	void decrementGrade();
+    const std::string& getName() const;
+    int getGrade() const;
+    void incrementGrade();
+    void decrementGrade();
 
-	struct GradeTooHighException: public std::runtime_error
-	{
-		GradeTooHighException();
-	};
+    struct GradeTooHighException: public std::runtime_error
+    {
+        GradeTooHighException();
+    };
 
-	struct GradeTooLowException: public std::runtime_error
-	{
-		GradeTooLowException();
-	};
+    struct GradeTooLowException: public std::runtime_error
+    {
+        GradeTooLowException();
+    };
 
 private:
-	static int checkGrade(int grade);
+    static int checkGrade(int grade);
 
-	const std::string name;
-	int grade;
+    const std::string name;
+    int grade;
 };
 
 std::ostream& operator<<(std::ostream& stream, const Bureaucrat& bureaucrat);
