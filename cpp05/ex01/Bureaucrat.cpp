@@ -1,21 +1,6 @@
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 
-Bureaucrat::Bureaucrat()
-    : Bureaucrat("Lowbie", 150)
-{
-}
-
-Bureaucrat::~Bureaucrat()
-{
-}
-
-Bureaucrat::Bureaucrat(const Bureaucrat& other)
-    : name(other.name),
-      grade(checkGrade(other.grade))
-{
-}
-
 Bureaucrat::Bureaucrat(const std::string& name, int grade)
     : name(name),
       grade(checkGrade(grade))
@@ -47,7 +32,7 @@ void Bureaucrat::signForm(Form& form) const
     try {
         form.beSigned(*this);
         std::cout << *this << " signed " << form << "\n";
-    } catch (const Form::GradeTooLowException& exception) {
+    } catch (const std::runtime_error& exception) {
         std::cout << *this << " couldn't sign " << form;
         std::cout << " because " << exception.what() << "\n";
     }

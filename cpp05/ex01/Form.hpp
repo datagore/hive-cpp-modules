@@ -10,10 +10,9 @@ class Form
 {
 public:
     Form();
-    ~Form();
-    Form(const Form&);
+    ~Form() = default;
+    Form(const Form&) = default;
     Form& operator=(const Form&) = delete;
-
     Form(const std::string& name, int signGrade, int execGrade);
 
     const std::string& getName() const;

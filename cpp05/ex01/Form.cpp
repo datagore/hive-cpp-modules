@@ -6,18 +6,6 @@ Form::Form()
 {
 }
 
-Form::~Form()
-{
-}
-
-Form::Form(const Form& other)
-    : name(other.name),
-      signGrade(checkGrade(other.signGrade)),
-      execGrade(checkGrade(other.execGrade)),
-      isSigned(false)
-{
-}
-
 Form::Form(const std::string& name, int signGrade, int execGrade)
     : name(name),
       signGrade(checkGrade(signGrade)),

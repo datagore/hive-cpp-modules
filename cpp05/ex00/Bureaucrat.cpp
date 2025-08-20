@@ -1,20 +1,5 @@
 #include "Bureaucrat.hpp"
 
-Bureaucrat::Bureaucrat()
-    : Bureaucrat("Lowbie", 150)
-{
-}
-
-Bureaucrat::~Bureaucrat()
-{
-}
-
-Bureaucrat::Bureaucrat(const Bureaucrat& other)
-    : name(other.name),
-      grade(checkGrade(other.grade))
-{
-}
-
 Bureaucrat::Bureaucrat(const std::string& name, int grade)
     : name(name),
       grade(checkGrade(grade))

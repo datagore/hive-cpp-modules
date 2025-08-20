@@ -8,8 +8,8 @@ class Bureaucrat
 {
 public:
     Bureaucrat();
-    ~Bureaucrat();
-    Bureaucrat(const Bureaucrat&);
+    ~Bureaucrat() = default;
+    Bureaucrat(const Bureaucrat&) = default;
     Bureaucrat& operator=(const Bureaucrat&) = delete;
     Bureaucrat(const std::string& name, int grade);
 
@@ -31,8 +31,8 @@ public:
 private:
     static int checkGrade(int grade);
 
-    const std::string name;
-    int grade;
+    const std::string name = "Anonymous";
+    int grade = 150;
 };
 
 std::ostream& operator<<(std::ostream& stream, const Bureaucrat& bureaucrat);
