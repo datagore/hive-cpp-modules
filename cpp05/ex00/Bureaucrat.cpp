@@ -51,12 +51,12 @@ int Bureaucrat::checkGrade(int grade)
 }
 
 Bureaucrat::GradeTooHighException::GradeTooHighException()
-    : std::runtime_error("grade too high")
+    : std::runtime_error("grade is too high")
 {
 }
 
 Bureaucrat::GradeTooLowException::GradeTooLowException()
-    : std::runtime_error("grade too low")
+    : std::runtime_error("grade is too low")
 {
 }
 
@@ -64,5 +64,5 @@ std::ostream& operator<<(std::ostream& stream, const Bureaucrat& bureaucrat)
 {
     int grade = bureaucrat.getGrade();
     const std::string& name = bureaucrat.getName();
-    return stream << name << ", bureaucrat grade " << grade << ".\n";
+    return stream << name << ", bureaucrat grade " << grade;
 }

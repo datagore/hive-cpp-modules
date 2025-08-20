@@ -24,38 +24,38 @@ void run_test(const char *label, void (*test_code)())
 int main()
 {
     run_test("Construct with a too high grade", [] {
-        Bureaucrat bureaucrat("Zero", 0);
-        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << bureaucrat;
+        Bureaucrat guy("Zero", 0);
+        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << guy << "\n";
     });
 
     run_test("Construct with a too low grade", [] {
-        Bureaucrat bureaucrat("Lowbie", 151);
-        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << bureaucrat;
+        Bureaucrat guy("Lowbie", 151);
+        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << guy << "\n";
     });
 
     run_test("Construct with an acceptably high grade", [] {
-        Bureaucrat bureaucrat("Boss man", 1);
-        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << bureaucrat;
+        Bureaucrat guy("Boss man", 1);
+        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << guy << "\n";
     });
 
     run_test("Construct with an acceptably low grade", [] {
-        Bureaucrat bureaucrat("Newbie", 150);
-        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << bureaucrat;
+        Bureaucrat guy("Newbie", 150);
+        std::cout << ANSI_GREEN << "Constructed " ANSI_RESET << guy << "\n";
     });
 
     run_test("Increment grade until too high", [] {
-        Bureaucrat bureaucrat("Corporate climber", 3);
+        Bureaucrat guy("Corporate climber", 3);
         while (true) {
-            std::cout << ANSI_GREEN << "Promoted " ANSI_RESET << bureaucrat;
-            bureaucrat.incrementGrade();
+            std::cout << ANSI_GREEN << "Promoted " ANSI_RESET << guy << "\n";
+            guy.incrementGrade();
         }
     });
 
     run_test("Decrement grade until too low", [] {
-        Bureaucrat bureaucrat("Hopeless fuck-up", 148);
+        Bureaucrat guy("Hopeless fuck-up", 148);
         while (true) {
-            std::cout << ANSI_GREEN << "Demoted " ANSI_RESET << bureaucrat;
-            bureaucrat.decrementGrade();
+            std::cout << ANSI_GREEN << "Demoted " ANSI_RESET << guy << "\n";
+            guy.decrementGrade();
         }
     });
 }
