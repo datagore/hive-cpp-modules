@@ -1,12 +1,12 @@
 #! /usr/bin/bash
 
 test() {
-	echo -e "\n\e[1m./convert $1\e[0m ($2)"
-	./convert $1
+    echo -e "\n\e[1m./convert $1\e[0m ($2)"
+    ./convert $1
 }
 
 section() {
-	echo -e "\n\e[1;33m=============== $1 ===============\e[0m"
+    echo -e "\n\e[1;33m=============== $1 ===============\e[0m"
 }
 
 section "INTEGER TESTS"

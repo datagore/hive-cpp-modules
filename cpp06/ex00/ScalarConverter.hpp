@@ -5,8 +5,8 @@
 class ScalarConverter
 {
 public:
-	static void convert(const std::string&);
+    static void convert(const std::string&);
 
 private:
-	ScalarConverter() = delete;
+    ScalarConverter() = delete;
 };
