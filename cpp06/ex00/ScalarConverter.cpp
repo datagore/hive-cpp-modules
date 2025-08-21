@@ -1,163 +1,100 @@
-#include <cctype>
 #include <cmath>
-#include <cstdlib>
 #include <iostream>
-#include <limits>
-#include <optional>
+#include <climits>
+#include <cstring>
 
 #include "ScalarConverter.hpp"
 
-// Convert a string to a char value, return true if the value is representable
-// in that type.
-
-bool readChar(const std::string& string, char& value)
+// Try converting a string to a char value. Output the corresponding double
+// value and return true if the conversion succeeded.
+bool isChar(const std::string& string, double& value)
 {
-    if (string.length() == 3 && string[0] == '\'' && string[2] == '\''
-     && string[1] >= ' ' && string[1] <= '~') {
-        value = string[1];
-        return true;
-    }
-    return false;
-}
-
-// Convert a string to an int value, return true if the value is representable
-// in that type.
-
-bool readInt(const std::string& string, int& value)
-{
-    if (!string.empty() && string.length() < 12) {
-        char* end = nullptr;
-        long long longValue = std::strtoll(string.data(), &end, 10);
-        if (end == string.data() + string.length()
-         && longValue >= std::numeric_limits<int>::min()
-         && longValue <= std::numeric_limits<int>::max()) {
-            value = static_cast<int>(longValue);
-            return true;
-        }
-    }
-    return false;
-}
-
-// Convert a string to a float value, return true if the value is representable
-// in that type.
-
-bool readFloat(const std::string& string, float& value)
-{
-    if (string == "inff" || string == "+inff") {
-        value = +std::numeric_limits<float>::infinity();
-    } else if (string == "-inff") {
-        value = -std::numeric_limits<float>::infinity();
-    } else if (string == "nanf") {
-        value = std::numeric_limits<float>::quiet_NaN();
-    } else if (string.find('.') != string.npos && string.back() == 'f') {
-        char* end = nullptr;
-        value = std::strtof(string.data(), &end);
-        if (end != &string.back())
-            return false;
-    } else {
+    if (string.length() != 1 || !std::isprint(string.front()))
         return false;
-    }
+    value = static_cast<double>(string.front());
     return true;
 }
 
-// Convert a string to a double value, return true if the value is representable
-// in that type.
-
-bool readDouble(const std::string& string, double& value)
+// Try converting a string to an int value. Output the corresponding double
+// value and return true if the conversion succeeded.
+bool isInt(const std::string& string, double& value)
 {
-    if (string == "inf" || string == "+inf") {
-        value = +std::numeric_limits<double>::infinity();
-    } else if (string == "-inf") {
-        value = -std::numeric_limits<double>::infinity();
-    } else if (string == "nan") {
-        value = std::numeric_limits<double>::quiet_NaN();
-    } else if (string.find('.') != string.npos) {
-        char* end = nullptr;
-        value = std::strtod(string.data(), &end);
-        if (end != string.data() + string.length())
-            return false;
-    } else {
+    char* end = nullptr;
+    long longValue = std::strtol(string.data(), &end, 10);
+    value = static_cast<double>(longValue);
+    return !string.empty() && end == string.data() + string.length()
+        && longValue <= INT_MIN && longValue >= INT_MAX;
+}
+
+// Try converting a string to a float value. Output the corresponding double
+// value and return true if the conversion succeeded.
+bool isFloat(const std::string& string, double& value)
+{
+    char* end = nullptr;
+    float floatValue = std::strtof(string.data(), &end);
+    value = static_cast<double>(floatValue);
+    if (string.find('.') == string.npos && std::isfinite(value))
         return false;
-    }
-    return true;
+    return std::strcmp(end, "f") == 0;
 }
 
-std::optional<int> floatToInt(float value)
+// Try converting a string to a double value. Output the value and return true
+// if the conversion succeeded.
+bool isDouble(const std::string& string, double& value)
 {
-    if (std::isfinite(value) && std::trunc(value) == value
-     && static_cast<float>(std::numeric_limits<int>::min()) <= value
-     && static_cast<float>(std::numeric_limits<int>::max()) >= value)
-        return static_cast<int>(value);
-    return std::nullopt;
+    char* end = nullptr;
+    value = std::strtod(string.data(), &end);
+    return !string.empty() && end == string.data() + string.length();
 }
 
-std::optional<double> doubleToInt(double value)
+// Trim trailing zeros from a string representing a floating point number.
+std::string trim(std::string number)
 {
-    if (std::isfinite(value) && std::trunc(value) == value
-     && static_cast<double>(std::numeric_limits<int>::min()) <= value
-     && static_cast<double>(std::numeric_limits<int>::max()) >= value)
-        return static_cast<int>(value);
-    return std::nullopt;
+    number.resize(number.find_last_not_of('0') + 1);
+    if (number.back() == '.')
+        number.push_back('0');
+    return number;
 }
 
-void ScalarConverter::convert(const std::string& string)
+void ScalarConverter::convert(const std::string& s)
 {
-    char charValue;
-    int intValue;
-    float floatValue;
-    double doubleValue;
+    // Try converting the string to a suitable type.
+    double d;
+    if (isInt(s, d) || isFloat(s, d) || isDouble(s, d) || isChar(s, d)) {
 
-    // Doubles.
-    if (readDouble(string, doubleValue)) {
-        std::optional<int> intValue = doubleToInt(doubleValue);
-        if (intValue) {
-            if (*intValue >= ' ' && *intValue <= '~')
-                std::cout << "char: '" << static_cast<char>(*intValue) << "'\n";
-            else
-                std::cout << "char: Non displayable\n";
-            std::cout << "int: " << *intValue << "\n";
+        // Explicitly convert the value to the other types.
+        float f = static_cast<float>(d);
+        int i = static_cast<int>(d);
+        char c = static_cast<char>(d);
+
+        // Try writing the value as a char.
+        if (static_cast<double>(c) == d) {
+            if (std::isprint(c)) {
+                std::cout << "char:  '" << c << "'\n";
+            } else {
+                std::cout << "char:  Non displayable\n";
+            }
         } else {
-            std::cout << "char: impossible\n";
-            std::cout << "int: impossible\n";
+            std::cout << "char:  impossible\n";
         }
-        std::cout << "float: " << static_cast<float>(doubleValue) << "f\n";
-        std::cout << "double: " << doubleValue << "\n";
 
-    // Floats
-    } else if (readFloat(string, floatValue)) {
-        std::optional<int> intValue = floatToInt(floatValue);
-        if (intValue) {
-            if (*intValue >= ' ' && *intValue <= '~')
-                std::cout << "char: '" << static_cast<char>(*intValue) << "'\n";
-            else
-                std::cout << "char: Non displayable\n";
-            std::cout << "int: " << *intValue << "\n";
-        } else {
-            std::cout << "char: impossible\n";
-            std::cout << "int: impossible\n";
-        }
-        std::cout << "float: " << floatValue << "\n";
-        std::cout << "double: " << static_cast<double>(floatValue) << "\n";
-
-    // Integers
-    } else if (readInt(string, intValue)) {
-        if (intValue >= ' ' && intValue <= '~')
-            std::cout << "char: '" << static_cast<char>(intValue) << "'\n";
+        // Try writing the value as an int.
+        if (static_cast<double>(i) == d)
+            std::cout << "int:   " << i << "\n";
         else
-            std::cout << "char: Non displayable\n";
-        std::cout << "int: " << intValue << "\n";
-        std::cout << "float: " << static_cast<float>(intValue) << ".0f\n";
-        std::cout << "double: " << static_cast<double>(intValue) << ".0\n";
+            std::cout << "int:   impossible\n";
 
-    // Characters.
-    } else if (readChar(string, charValue)) {
-        std::cout << "char: '" << charValue << "'\n";
-        std::cout << "int: " << static_cast<int>(charValue) << "\n";
-        std::cout << "float: " << static_cast<float>(charValue) << ".0f\n";
-        std::cout << "double: " << static_cast<double>(charValue) << ".0\n";
+        // Try writing the value as a float.
+        if (static_cast<double>(f) == d || !std::isfinite(f))
+            std::cout << "float: " << trim(std::to_string(f)) << "f\n";
+        else
+            std::cout << "float: impossible\n";
 
-    // Invalid inputs.
+        // All of the above values are representable in a double.
+        std::cout << "double: " << trim(std::to_string(d)) << "\n";
+
+    // Any other input is an error.
     } else {
-        std::cout << "error: invalid input\n";
+        std::cout << "Invalid input\n";
     }
 }
