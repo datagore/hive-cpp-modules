@@ -16,7 +16,7 @@ int main()
 
     // Use the Serialize class to make an array of serialized pointers to Data
     // objects.
-    uintptr_t serialized[10];
+    uintptr_t serialized[COUNT];
     for (int i = 0; i < COUNT; i++)
         serialized[i] = Serializer::serialize(&numbers[i]);
 
