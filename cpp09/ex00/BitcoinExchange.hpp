@@ -17,5 +17,5 @@ public:
 
 private:
 
-    std::map<std::string, double> database;
+    std::map<std::string, double, std::greater<std::string>> database;
 };
