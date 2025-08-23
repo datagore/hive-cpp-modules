@@ -6,10 +6,11 @@
 #include "easyfind.hpp"
 
 // Helper macros for applying ANSI color codes.
-#define ANSI_RED "\x1b[1;31m"
-#define ANSI_GREEN "\x1b[1;32m"
+#define ANSI_RED    "\x1b[1;31m"
+#define ANSI_GREEN  "\x1b[1;32m"
 #define ANSI_YELLOW "\x1b[1;33m"
-#define ANSI_RESET "\x1b[0m"
+#define ANSI_RESET  "\x1b[0m"
+#define ANSI_CLEAR  "\x1b[2J"
 
 template <typename T>
 void run_test(const char* label, const T& container, int value)
@@ -35,6 +36,7 @@ void run_test(const char* label, const T& container, int value)
 
 int main()
 {
+    std::cout << ANSI_CLEAR;
     run_test("Existing value in vector", std::vector<int> {1, 2, 3, 4, 5}, 2);
     run_test("Missing value in vector", std::vector<int> {1, 2, 3, 4, 5}, 0);
     run_test("Existing value in list", std::list<int> {420, 69, 666}, 69);
