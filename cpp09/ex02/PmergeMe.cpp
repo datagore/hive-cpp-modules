@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <climits>
 #include <cstdlib>
@@ -8,11 +9,52 @@
 
 #include "PmergeMe.hpp"
 
-// ANSI escape codes.
-#define ANSI_RED    "\x1b[1;31m"
-#define ANSI_GREEN  "\x1b[1;32m"
-#define ANSI_YELLOW "\x1b[1;33m"
-#define ANSI_RESET  "\x1b[0m"
+////////////////////////////////////////////////////////////////////////////////
+//
+// Sorting using std::vector
+//
+////////////////////////////////////////////////////////////////////////////////
+
+void sortVector(std::vector<int>& numbers)
+{
+    (void) numbers;
+}
+
+// Sort numbers using a std::vector. Returns the time taken in microseconds.
+double timeSortVector(std::vector<int>& numbers)
+{
+    auto t0 = std::chrono::steady_clock::now();
+    sortVector(numbers);
+    auto t1 = std::chrono::steady_clock::now();
+    return std::chrono::duration<double, std::micro>(t1 - t0).count();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Sorting using std::list
+//
+////////////////////////////////////////////////////////////////////////////////
+
+void sortList(std::list<int>& numbers)
+{
+    (void) numbers;
+}
+
+// Sort numbers using a std::list. Returns the time taken in microseconds.
+double timeSortList(const std::vector<int>& source)
+{
+    auto t0 = std::chrono::steady_clock::now();
+    auto numbers = std::list<int>(source.begin(), source.end());
+    sortList(numbers);
+    auto t1 = std::chrono::steady_clock::now();
+    return std::chrono::duration<double, std::micro>(t1 - t0).count();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Entry point
+//
+////////////////////////////////////////////////////////////////////////////////
 
 // Print all numbers in a container.
 template <class Container>
@@ -47,25 +89,8 @@ int parseInt(const char* string)
     return number;
 }
 
-// Sort numbers using a std::vector. Returns the time taken in microseconds.
-double vectorSort(std::vector<int>& numbers)
-{
-    auto t0 = std::chrono::steady_clock::now();
-    (void) numbers;
-    auto t1 = std::chrono::steady_clock::now();
-    return std::chrono::duration<double, std::micro>(t1 - t0).count();
-}
-
-// Sort numbers using a std::list. Returns the time taken in microseconds.
-double listSort(const std::vector<int>& source)
-{
-    auto t0 = std::chrono::steady_clock::now();
-    auto numbers = std::list<int>(source.begin(), source.end());
-    (void) numbers;
-    auto t1 = std::chrono::steady_clock::now();
-    return std::chrono::duration<double, std::micro>(t1 - t0).count();
-}
-
+// Read command line arguments and sort using the different containers, and
+// print the timings for each.
 PmergeMe::PmergeMe(int argc, char** argv)
 {
     // Read numbers from the command line.
@@ -77,9 +102,13 @@ PmergeMe::PmergeMe(int argc, char** argv)
 
     // Sort using two different containers.
     printNumbers("Before: ", numbers);
-    double list_time = listSort(numbers);
-    double vector_time = vectorSort(numbers);
+    double list_time = timeSortList(numbers);
+    double vector_time = timeSortVector(numbers);
     printNumbers("After:  ", numbers);
+
+    // Double check that the numbers are actually sorted.
+    if (!std::is_sorted(numbers.begin(), numbers.end()))
+        throw std::runtime_error("numbers are not sorted");
 
     // Print timings.
     printTiming(numbers.size(), vector_time, "std::vector");
