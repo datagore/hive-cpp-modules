@@ -1,7 +1,6 @@
 #include <chrono>
 #include <climits>
 #include <cstdlib>
-#include <iomanip>
 #include <iostream>
 #include <list>
 #include <stdexcept>
@@ -15,10 +14,6 @@
 #define ANSI_YELLOW "\x1b[1;33m"
 #define ANSI_RESET  "\x1b[0m"
 
-// Type aliases for overly long <chrono> types.
-using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
-using TimeDelta = std::chrono::duration<double, std::micro>;
-
 // Print all numbers in a container.
 template <class Container>
 void printNumbers(const char* label, Container container)
@@ -30,11 +25,11 @@ void printNumbers(const char* label, Container container)
 }
 
 // Print the timing for one container.
-void printTiming(size_t numbers, TimeDelta timing, const char* container)
+void printTiming(size_t numbers, double microsecs, const char* container)
 {
-    std::cout << "Time to sort " ANSI_RED << numbers;
-    std::cout << ANSI_RESET " numbers with a " ANSI_GREEN << container;
-    std::cout << ANSI_RESET ": " ANSI_YELLOW << timing << ANSI_RESET "\n";
+    std::cout << "Time to sort " ANSI_RED << numbers << ANSI_RESET;
+    std::cout << " numbers with a " ANSI_GREEN << container << ": ";
+    std::cout << ANSI_YELLOW << microsecs << " µs" ANSI_RESET "\n";
 }
 
 // Read a single number from the command line. Check that it's actually a valid
@@ -52,23 +47,23 @@ int parseInt(const char* string)
     return number;
 }
 
-// Sort numbers using a std::vector. Returns the amount of time taken.
-TimeDelta vectorSort(std::vector<int>& numbers)
+// Sort numbers using a std::vector. Returns the time taken in microseconds.
+double vectorSort(std::vector<int>& numbers)
 {
-    TimePoint start_time = std::chrono::steady_clock::now();
+    auto t0 = std::chrono::steady_clock::now();
     (void) numbers;
-    TimePoint end_time = std::chrono::steady_clock::now();
-    return end_time - start_time;
+    auto t1 = std::chrono::steady_clock::now();
+    return std::chrono::duration<double, std::micro>(t1 - t0).count();
 }
 
-// Sort numbers using a std::list. Returns the amount of time taken.
-TimeDelta listSort(const std::vector<int>& source)
+// Sort numbers using a std::list. Returns the time taken in microseconds.
+double listSort(const std::vector<int>& source)
 {
-    TimePoint start_time = std::chrono::steady_clock::now();
+    auto t0 = std::chrono::steady_clock::now();
     auto numbers = std::list<int>(source.begin(), source.end());
     (void) numbers;
-    TimePoint end_time = std::chrono::steady_clock::now();
-    return end_time - start_time;
+    auto t1 = std::chrono::steady_clock::now();
+    return std::chrono::duration<double, std::micro>(t1 - t0).count();
 }
 
 PmergeMe::PmergeMe(int argc, char** argv)
@@ -82,8 +77,8 @@ PmergeMe::PmergeMe(int argc, char** argv)
 
     // Sort using two different containers.
     printNumbers("Before: ", numbers);
-    TimeDelta list_time = listSort(numbers);
-    TimeDelta vector_time = vectorSort(numbers);
+    double list_time = listSort(numbers);
+    double vector_time = vectorSort(numbers);
     printNumbers("After:  ", numbers);
 
     // Print timings.
