@@ -7,23 +7,18 @@
 
 int RPN::calculate(const std::string& expression)
 {
-    char prev = ' ';
+    // Use a stack to store intermediate values.
     std::stack<int> stack;
 
     // Iterate over characters in the expression.
-    for (char curr: expression) {
-
-        // Require spaces between digits and operators.
-        if (!std::isspace(curr) && !std::isspace(prev))
-            throw std::invalid_argument("missing space");
-        prev = curr;
+    for (char c: expression) {
 
         // Digits are pushed directly to the stack.
-        if (std::isdigit(curr)) {
-            stack.push(curr - '0');
+        if (std::isdigit(c)) {
+            stack.push(c - '0');
 
         // Any other non-space character is an operator.
-        } else if (!std::isspace(curr)) {
+        } else if (!std::isspace(c)) {
 
             // Get the top two values from the stack.
             if (stack.size() < 2)
@@ -33,7 +28,7 @@ int RPN::calculate(const std::string& expression)
 
             // Do arithmetic.
             long res;
-            switch (curr) {
+            switch (c) {
                 case '+': res = lhs + rhs; break;
                 case '-': res = lhs - rhs; break;
                 case '*': res = lhs * rhs; break;
