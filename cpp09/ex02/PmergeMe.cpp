@@ -15,16 +15,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-void sortVector(std::vector<int>& numbers)
+// Sort the elements of array `a` between indices `beg` and `end`, using the
+// same range of elements in array `b` for temporary storage.
+
+void sortVec(std::vector<int>& a, std::vector<int>& b, size_t beg, size_t end)
 {
-    (void) numbers;
+    if (end - beg > 1) { // Base case: An array of length one is already sorted.
+        size_t mid = (beg + end) / 2; // Split the range in two halves.
+        sortVec(b, a, beg, mid); // Sort the lower half.
+        sortVec(b, a, mid, end); // Sort the upper half.
+        for (size_t p = beg, q = beg, r = mid; p < end; p++)
+            a[p] = b[q < mid && (r >= end || b[q] <= b[r]) ? q++ : r++];
+    }
 }
 
 // Sort numbers using a std::vector. Returns the time taken in microseconds.
-double timeSortVector(std::vector<int>& numbers)
+
+double timeSortVec(std::vector<int>& numbers)
 {
+    std::vector<int> temp = numbers;
     auto t0 = std::chrono::steady_clock::now();
-    sortVector(numbers);
+    sortVec(numbers, temp, 0, numbers.size());
     auto t1 = std::chrono::steady_clock::now();
     return std::chrono::duration<double, std::micro>(t1 - t0).count();
 }
@@ -41,10 +52,11 @@ void sortList(std::list<int>& numbers)
 }
 
 // Sort numbers using a std::list. Returns the time taken in microseconds.
+
 double timeSortList(const std::vector<int>& source)
 {
-    auto t0 = std::chrono::steady_clock::now();
     auto numbers = std::list<int>(source.begin(), source.end());
+    auto t0 = std::chrono::steady_clock::now();
     sortList(numbers);
     auto t1 = std::chrono::steady_clock::now();
     return std::chrono::duration<double, std::micro>(t1 - t0).count();
@@ -57,6 +69,7 @@ double timeSortList(const std::vector<int>& source)
 ////////////////////////////////////////////////////////////////////////////////
 
 // Print all numbers in a container.
+
 template <class Container>
 void printNumbers(const char* label, Container container)
 {
@@ -67,6 +80,7 @@ void printNumbers(const char* label, Container container)
 }
 
 // Print the timing for one container.
+
 void printTiming(size_t numbers, double microsecs, const char* container)
 {
     std::cout << "Time to sort " ANSI_RED << numbers << ANSI_RESET;
@@ -76,6 +90,7 @@ void printTiming(size_t numbers, double microsecs, const char* container)
 
 // Read a single number from the command line. Check that it's actually a valid
 // positive int value.
+
 int parseInt(const char* string)
 {
     char* end = nullptr;
@@ -91,6 +106,7 @@ int parseInt(const char* string)
 
 // Read command line arguments and sort using the different containers, and
 // print the timings for each.
+
 PmergeMe::PmergeMe(int argc, char** argv)
 {
     // Read numbers from the command line.
@@ -100,17 +116,21 @@ PmergeMe::PmergeMe(int argc, char** argv)
     for (int i = 0; i < argc - 1; i++)
         numbers[i] = parseInt(argv[i + 1]);
 
+    // Make a sorted copy of the numbers for later reference.
+    std::vector<int> sorted = numbers;
+    std::sort(sorted.begin(), sorted.end());
+
     // Sort using two different containers.
     printNumbers("Before: ", numbers);
-    double list_time = timeSortList(numbers);
-    double vector_time = timeSortVector(numbers);
+    double listTime = timeSortList(numbers);
+    double vectorTime = timeSortVec(numbers);
     printNumbers("After:  ", numbers);
 
-    // Double check that the numbers are actually sorted.
-    if (!std::is_sorted(numbers.begin(), numbers.end()))
-        throw std::runtime_error("numbers are not sorted");
-
     // Print timings.
-    printTiming(numbers.size(), vector_time, "std::vector");
-    printTiming(numbers.size(), list_time,   "std::list");
+    printTiming(numbers.size(), listTime,   "std::list");
+    printTiming(numbers.size(), vectorTime, "std::vector");
+
+    // Double-check that the numbers were actually sorted.
+    if (!std::equal(numbers.begin(), numbers.end(), sorted.begin()))
+        throw std::runtime_error("numbers are not sorted");
 }
