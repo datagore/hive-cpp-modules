@@ -2,71 +2,44 @@
 #include <chrono>
 #include <climits>
 #include <cstdlib>
+#include <deque>
 #include <iostream>
-#include <list>
 #include <stdexcept>
 #include <vector>
 
 #include "PmergeMe.hpp"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Sorting using std::vector
-//
-////////////////////////////////////////////////////////////////////////////////
-
-// Sort the elements of array `a` between indices `beg` and `end`, using the
-// same range of elements in array `b` for temporary storage.
-
-void sortVec(std::vector<int>& a, std::vector<int>& b, size_t beg, size_t end)
+template <typename T>
+void sort(T& n, size_t beg, size_t end)
 {
-    if (end - beg > 1) { // Base case: An array of length one is already sorted.
-        size_t mid = (beg + end) / 2; // Split the range in two halves.
-        sortVec(b, a, beg, mid); // Sort the lower half.
-        sortVec(b, a, mid, end); // Sort the upper half.
-        for (size_t p = beg, q = beg, r = mid; p < end; p++)
-            a[p] = b[q < mid && (r >= end || b[q] <= b[r]) ? q++ : r++];
+    if (end - beg > 1) {
+        size_t mid = (beg + end) / 2;
+        sort(n, beg, mid);
+        for (; mid < end; mid++) {
+            int value = n[mid];
+            auto place = std::lower_bound(n.begin() + beg, n.begin() + mid, value);
+            std::move_backward(place, n.begin() + mid, n.begin() + mid + 1);
+            *place = value;
+        }
     }
 }
 
-// Sort numbers using a std::vector. Returns the time taken in microseconds.
-
 double timeSortVec(std::vector<int>& numbers)
 {
-    std::vector<int> temp = numbers;
     auto t0 = std::chrono::steady_clock::now();
-    sortVec(numbers, temp, 0, numbers.size());
+    sort(numbers, 0, numbers.size());
     auto t1 = std::chrono::steady_clock::now();
     return std::chrono::duration<double, std::micro>(t1 - t0).count();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Sorting using std::list
-//
-////////////////////////////////////////////////////////////////////////////////
-
-void sortList(std::list<int>& numbers)
+double timeSortDeque(const std::vector<int>& source)
 {
-    (void) numbers;
-}
-
-// Sort numbers using a std::list. Returns the time taken in microseconds.
-
-double timeSortList(const std::vector<int>& source)
-{
-    auto numbers = std::list<int>(source.begin(), source.end());
+    auto numbers = std::deque<int>(source.begin(), source.end());
     auto t0 = std::chrono::steady_clock::now();
-    sortList(numbers);
+    sort(numbers, 0, numbers.size());
     auto t1 = std::chrono::steady_clock::now();
     return std::chrono::duration<double, std::micro>(t1 - t0).count();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Entry point
-//
-////////////////////////////////////////////////////////////////////////////////
 
 // Print all numbers in a container.
 
@@ -122,12 +95,12 @@ PmergeMe::PmergeMe(int argc, char** argv)
 
     // Sort using two different containers.
     printNumbers("Before: ", numbers);
-    double listTime = timeSortList(numbers);
+    double dequeTime = timeSortDeque(numbers);
     double vectorTime = timeSortVec(numbers);
     printNumbers("After:  ", numbers);
 
     // Print timings.
-    printTiming(numbers.size(), listTime,   "std::list");
+    printTiming(numbers.size(), dequeTime,  "std::deque");
     printTiming(numbers.size(), vectorTime, "std::vector");
 
     // Double-check that the numbers were actually sorted.
