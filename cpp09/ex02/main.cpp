@@ -6,20 +6,14 @@
 
 #if 1
 
-template <class Container>
-void print(const char* label, const Container& numbers)
-{
-    std::cout << label;
-    for (int number: numbers)
-        std::cout << number << " ";
-    std::cout << "\n";
-}
-
-// Get the nth Jacobstahl number.
+// Get the difference between successive Jacobstahl numbers. Jacobstahl numbers
+// can be calculated using the formula J(n) = ((1 << n) + (n % 2 * 2 - 1)) / 3.
+// The function below is derived by rearranging and simplifying J(n+2) - J(n+1).
+// Starting from n = 0, this generates the sequence 2, 2, 6, 10, 22, 42, 86...
 
 size_t jacobstahl(size_t n)
 {
-    return ((1 << n) + ((n % 2) * 2 - 1)) / 3;
+    return (4 << n) / 3 + ((n + 1) % 2);
 }
 
 // Move groups of `count` integers from the index `src` to the index `dst`,
@@ -34,14 +28,13 @@ void shift(Container& a, size_t dst, size_t src, size_t count)
     std::rotate(first, middle, last);
 }
 
-// Use binary search to insert the group of `count` integers at index `src` into
-// the start of the sequence.
+// Use binary search to insert a group of `count` integers at index `src` into
+// the first `max` elements of the sequence.
 
 template <class Container>
-void insert(Container& n, size_t src, size_t count)
+void insert(Container& n, size_t max, size_t src, size_t count)
 {
     size_t min = 0;
-    size_t max = src;
     while (min < max) {
         size_t mid = (min + max) / 2;
         if (n[mid * count + count - 1] < n[src * count + count - 1])
@@ -60,12 +53,21 @@ void insert(Container& n, size_t src, size_t count)
 template <class Container>
 void merge(Container& n, size_t count)
 {
+    // Move the larger, even-numbered elements to the front of the array.
     size_t elems = n.size() / count;
     size_t end = n.size() / (count * 2) + 1;
     for (size_t i = 2; i < end; i++)
         shift(n, i * count, i * count * 2 - count, count);
-    for (size_t src = end; src < elems; src++)
-        insert(n, src, count);
+
+    // Insert the remaining elements in an order determined by the Jacobstahl
+    // numbers.
+    size_t group = 0;
+    size_t offset = 0;
+    for (size_t i = end; i < elems; i++) {
+        if (offset == 0)
+            offset = std::min(elems - i, jacobstahl(group++));
+        insert(n, i, --offset + i, count);
+    }
 }
 
 // Divide a sequence into groups of `count` numbers. Swap adjacent pairs of
@@ -91,11 +93,20 @@ void sort(Container& n, size_t count = 1)
     merge(n, count);
 }
 
+template <class Container>
+void print(const char* label, const Container& numbers)
+{
+    std::cout << label;
+    for (int number: numbers)
+        std::cout << number << " ";
+    std::cout << "\n";
+}
+
 int main(int argc, const char **argv)
 {
-    std::vector<int> numbers;
-    for (int i  = 1; i < argc; i++)
-        numbers.push_back(std::atoi(argv[i]));
+    std::vector<int> numbers(argc - 1);
+    for (int i = 1; i < argc; i++)
+        numbers[i - 1] = std::atoi(argv[i]);
     print("Before: ", numbers);
     sort(numbers);
     print("After:  ", numbers);
