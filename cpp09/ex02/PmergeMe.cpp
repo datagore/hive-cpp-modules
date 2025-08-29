@@ -1,34 +1,16 @@
 #include <algorithm>
 #include <chrono>
-#include <climits>
-#include <cstdlib>
 #include <deque>
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 
 #include "PmergeMe.hpp"
 
-struct Counter
-{
-    int value;
-    Counter(int value = 0): value(value) {}
-    operator int() const { return value; }
-    static size_t comparisons;
-    auto operator<=>(const Counter& other) const
-    {
-        comparisons++;
-        return value <=> other.value;
-    }
-};
-size_t Counter::comparisons;
-
-template <class Container>
-void print(const Container& container)
-{
-    for (auto number: container)
-        printf("%2d ", static_cast<int>(number));
-}
+////////////////////////////////////////////////////////////////////////////////
+//
+// Ford-Johnson algorithm
+//
+////////////////////////////////////////////////////////////////////////////////
 
 // Get the difference between successive Jacobstahl numbers. Jacobstahl numbers
 // can be calculated using the formula J(n) = ((1 << n) + (n % 2 * 2 - 1)) / 3.
@@ -117,21 +99,21 @@ void sort(Container& n, size_t count = 1)
     merge(n, count);
 }
 
-double timeSortVec(std::vector<int>& numbers)
-{
-    auto t0 = std::chrono::steady_clock::now();
-    sort(numbers);
-    auto t1 = std::chrono::steady_clock::now();
-    return std::chrono::duration<double, std::micro>(t1 - t0).count();
-}
+////////////////////////////////////////////////////////////////////////////////
+//
+// Comparison program
+//
+////////////////////////////////////////////////////////////////////////////////
 
-double timeSortDeque(const std::vector<int>& source)
+// Sort a container, and also measure how long the sorting procedure takes.
+
+template <class Container>
+double timeSortContainer(Container& container)
 {
-    auto numbers = std::deque<int>(source.begin(), source.end());
-    auto t0 = std::chrono::steady_clock::now();
-    sort(numbers);
-    auto t1 = std::chrono::steady_clock::now();
-    return std::chrono::duration<double, std::micro>(t1 - t0).count();
+    auto start = std::chrono::steady_clock::now();
+    sort(container);
+    auto end = std::chrono::steady_clock::now();
+    return std::chrono::duration<double, std::micro>(end - start).count();
 }
 
 // Print all numbers in a container.
@@ -149,75 +131,31 @@ void printNumbers(const char* label, Container container)
 
 void printTiming(size_t numbers, double microsecs, const char* container)
 {
-    std::cout << "Time to sort " ANSI_RED << numbers << ANSI_RESET;
+    std::cout << "Time to sort " ANSI_GREEN << numbers << ANSI_RESET;
     std::cout << " numbers with a " ANSI_GREEN << container << ": ";
     std::cout << ANSI_YELLOW << microsecs << " µs" ANSI_RESET "\n";
 }
 
-// Read a single number from the command line. Check that it's actually a valid
-// positive int value.
-
-int parseInt(const char* string)
+PmergeMe::PmergeMe(const std::vector<int>& numbers)
 {
-    char* end = nullptr;
-    long number = strtol(string, &end, 10);
-    if (end != nullptr && *end != '\0')
-        throw std::invalid_argument("non-numeric argument");
-    if (number <= 0)
-        throw std::invalid_argument("non-positive argument");
-    if (number > INT_MAX)
-        throw std::overflow_error("argument too large");
-    return number;
-}
+    // Copy the input into two containers.
+    std::vector<int> vec(numbers.begin(), numbers.end());
+    std::deque<int>  deq(numbers.begin(), numbers.end());
 
-// Read command line arguments and sort using the different containers, and
-// print the timings for each.
+    // Sort the two containers, timing how long each one takes.
+    double vecTime = timeSortContainer(vec);
+    double deqTime = timeSortContainer(deq);
 
-PmergeMe::PmergeMe(int argc, char** argv)
-{
-    // Read numbers from the command line.
-    if (argc <= 1)
-        throw std::invalid_argument("not enough arguments");
-    std::vector<int> numbers(argc - 1);
-    for (int i = 0; i < argc - 1; i++)
-        numbers[i] = parseInt(argv[i + 1]);
-
-#if 0
-    // Make a sorted copy of the numbers for later reference.
-    std::vector<int> sorted = numbers;
-    std::sort(sorted.begin(), sorted.end());
-
-    // Sort using two different containers.
+    // Print the unsorted and sorted numbers.
     printNumbers("Before: ", numbers);
-    double dequeTime = timeSortDeque(numbers);
-    double vectorTime = timeSortVec(numbers);
-    printNumbers("After:  ", numbers);
+    printNumbers("After:  ", vec);
 
     // Print timings.
-    printTiming(numbers.size(), dequeTime,  "std::deque");
-    printTiming(numbers.size(), vectorTime, "std::vector");
+    printTiming(numbers.size(), vecTime, "std::vector");
+    printTiming(numbers.size(), deqTime, "std::deque");
 
     // Double-check that the numbers were actually sorted.
-    if (!std::equal(numbers.begin(), numbers.end(), sorted.begin()))
+    if (!std::is_sorted(vec.begin(), vec.end())
+     || !std::is_sorted(deq.begin(), deq.end()))
         throw std::runtime_error("numbers are not sorted");
-#endif
-
-    std::vector<Counter> counters(numbers.size());
-    for (size_t i = 0; i < counters.size(); i++)
-        counters[i] = numbers[i];
-    printf("Before: "); print(counters); printf("\n");
-    sort(counters);
-    printf("After: "); print(counters); printf("\n");
-    printf("Comparisons: %zu\n", Counter::comparisons);
-
-    // Double-check that the numbers were actually sorted.
-    if (!std::is_sorted(counters.begin(), counters.end()))
-        throw std::runtime_error("numbers are not sorted");
-
-    // Count how many comparisons were made.
-    for (size_t i = 0; i < counters.size(); i++)
-        counters[i] = numbers[i];
-    Counter::comparisons = 0;
-    std::sort(counters.begin(), counters.end());
-    printf("Comparisons: %zu\n", Counter::comparisons);
 }

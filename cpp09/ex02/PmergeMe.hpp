@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 // ANSI escape codes.
 #define ANSI_RED    "\x1b[1;31m"
 #define ANSI_GREEN  "\x1b[1;32m"
@@ -13,5 +15,5 @@ public:
     ~PmergeMe() = default;
     PmergeMe(const PmergeMe&) = default;
     PmergeMe& operator=(const PmergeMe&) = default;
-    PmergeMe(int argc, char **argv);
+    PmergeMe(const std::vector<int>& numbers);
 };
