@@ -11,26 +11,23 @@
 
 struct Counter
 {
-    Counter() = default;
-    Counter(int value): value(value) {}
-    auto operator<=>(const Counter& other) const { comparisons++; return value <=> other.value; }
+    int value;
+    Counter(int value = 0): value(value) {}
     operator int() const { return value; }
     static size_t comparisons;
-    int value = 0;
+    auto operator<=>(const Counter& other) const
+    {
+        comparisons++;
+        return value <=> other.value;
+    }
 };
 size_t Counter::comparisons;
 
 template <class Container>
 void print(const Container& container)
 {
-    int index = 0;
-    for (auto number: container) {
-        (void) number;
-        printf("%2d ", index++);
-    }
-    printf(" (INDICES)\n");
     for (auto number: container)
-        printf("%2d ", int(number));
+        printf("%2d ", static_cast<int>(number));
 }
 
 // Get the difference between successive Jacobstahl numbers. Jacobstahl numbers
@@ -61,10 +58,6 @@ void shift(Container& a, size_t dst, size_t src, size_t count)
 template <class Container>
 void insert(Container& n, size_t max, size_t src, size_t count)
 {
-    printf("Inserting %zu-sized group from %zu to %zu\n", count, src * count, max * count);
-    print(n);
-    printf("\n");
-    size_t start = Counter::comparisons;
     size_t min = 0;
     while (min < max) {
         size_t mid = (min + max) / 2;
@@ -74,8 +67,6 @@ void insert(Container& n, size_t max, size_t src, size_t count)
             max = mid;
     }
     shift(n, min * count, src * count, count);
-    print(n);
-    printf(" (%zu comparisons)\n", Counter::comparisons - start);
 }
 
 // Merge groups of `count` integers, first by moving odd-numbered ones to the
@@ -99,7 +90,7 @@ void merge(Container& n, size_t count)
     for (size_t i = end; i < elems; i++) {
         if (offset == 0)
             offset = std::min(elems - i, jacobstahl(group++));
-        insert(n, i, --offset + i, count);
+        insert(n, std::min(i, (2ul << group) - 1), --offset + i, count);
     }
 }
 
@@ -211,12 +202,19 @@ PmergeMe::PmergeMe(int argc, char** argv)
         throw std::runtime_error("numbers are not sorted");
 #endif
 
-    // numbers = std::vector<int> {3, 0, 2, 5, 6, 1, 9, 10};
     std::vector<Counter> counters(numbers.size());
     for (size_t i = 0; i < counters.size(); i++)
         counters[i] = numbers[i];
+    printf("Before: "); print(counters); printf("\n");
     sort(counters);
+    printf("After: "); print(counters); printf("\n");
     printf("Comparisons: %zu\n", Counter::comparisons);
+
+    // Double-check that the numbers were actually sorted.
+    if (!std::is_sorted(counters.begin(), counters.end()))
+        throw std::runtime_error("numbers are not sorted");
+
+    // Count how many comparisons were made.
     for (size_t i = 0; i < counters.size(); i++)
         counters[i] = numbers[i];
     Counter::comparisons = 0;
