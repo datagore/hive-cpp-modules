@@ -34,6 +34,6 @@ int main(int argc, char **argv)
             numbers[i] = parseInt(argv[i + 1]);
         PmergeMe pmergeMe(numbers);
     } catch (const std::exception& exception) {
-        std::cout << ANSI_RED "Error: " ANSI_RESET << exception.what() << "\n";
+        std::cerr << ANSI_RED "Error: " ANSI_RESET << exception.what() << "\n";
     }
 }
