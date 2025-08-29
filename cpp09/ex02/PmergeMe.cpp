@@ -51,21 +51,21 @@ void insert(Container& c, size_t max, size_t src, size_t n)
     move(c, min * n, src * n, n);
 }
 
-// Merge groups of `n` integers, first by moving odd-numbered ones to the front
-// of the sequence (including also the first group in the sequence), and then
-// repeatedly inserting the even-numbered ones into their right place using
-// binary search.
+// Merge groups of `n` integers, first by moving the higher groups (usually
+// labelled "a") to the beginning of the sequence (along with the first of the
+// lower "b" groups), and then repeatedly inserting "b" groups into the sequence
+// using binary search.
 
 template <class Container>
 void merge(Container& c, size_t n)
 {
-    // Move the larger, even-numbered elements to the front of the array.
+    // Move the higher "a" groups to the front of the array.
     size_t elems = c.size() / n;
     size_t end = c.size() / (n * 2) + 1;
     for (size_t i = 2; i < end; i++)
         move(c, i * n, i * n * 2 - n, n);
 
-    // Insert the remaining elements in an order determined by the Jacobstahl
+    // Insert the remaining "b" groups in an order determined by the Jacobstahl
     // numbers.
     size_t group = 0;
     size_t offset = 0;
