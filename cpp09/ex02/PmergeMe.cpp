@@ -142,7 +142,7 @@ void printTiming(size_t numbers, double microsecs, const char* container)
 // Test program entry point. Takes a sequence of numbers and sorts them using
 // two different containers, printing out the timings for each one.
 
-PmergeMe::PmergeMe(const std::vector<int>& unsorted)
+void mergeInsertionSort(const std::vector<int>& unsorted)
 {
     // Create two different containers to be sorted.
     std::vector<int> vec;

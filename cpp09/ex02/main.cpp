@@ -32,7 +32,7 @@ int main(int argc, char **argv)
         std::vector<int> numbers(argc - 1);
         for (int i = 0; i < argc - 1; i++)
             numbers[i] = parseInt(argv[i + 1]);
-        PmergeMe pmergeMe(numbers);
+        mergeInsertionSort(numbers);
     } catch (const std::exception& exception) {
         std::cerr << ANSI_RED "Error: " ANSI_RESET << exception.what() << "\n";
     }

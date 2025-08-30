@@ -1,15 +1,20 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <map>
+#include <string>
 
 #include "BitcoinExchange.hpp"
 
-// Type aliases for key/value pair types.
+// Type aliases.
+
+using Database = std::map<std::string, double, std::greater<std::string>>;
 using StringPair = std::pair<std::string, std::string>;
 using ValuePair = std::pair<std::string, double>;
 
 // Check if a date string is in YYYY-MM-DD format. Does not check if it's an
 // actual valid date, which would involve complicated calendar math.
+
 bool isDateShaped(const std::string& date)
 {
     const char* c = date.c_str();
@@ -20,6 +25,7 @@ bool isDateShaped(const std::string& date)
 }
 
 // Strip spaces at the start and end of a string.
+
 std::string stripWhitespace(std::string str)
 {
     str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
@@ -27,6 +33,7 @@ std::string stripWhitespace(std::string str)
 }
 
 // Read a pair of strings separated by a delimiter.
+
 StringPair getStringPair(std::ifstream& file, char delimiter)
 {
     // Read a line of text from the file.
@@ -47,6 +54,7 @@ StringPair getStringPair(std::ifstream& file, char delimiter)
 }
 
 // Read a date/value pair separated by a delimiter.
+
 ValuePair getValuePair(std::ifstream& file, char delimiter)
 {
     // Read a pair of strings; convert the second string to a number.
@@ -60,7 +68,7 @@ ValuePair getValuePair(std::ifstream& file, char delimiter)
     return {pair.first, value};
 }
 
-BitcoinExchange::BitcoinExchange(const std::string& filename)
+Database loadDatabase(const char* filename)
 {
     // Open the database CSV file.
     std::ifstream file(filename);
@@ -73,18 +81,23 @@ BitcoinExchange::BitcoinExchange(const std::string& filename)
         throw std::runtime_error("invalid database file header");
 
     // Read key/value pairs and store them in the database.
+    Database database;
     while (file.peek() != EOF)
         database.insert(getValuePair(file, ','));
 
     // Insert a dummy entry into the database, so that there's always at least
     // one entry which is ordered chronologically before every other one.
     database[""] = database.empty() ? 0.0 : (--database.end())->second;
+    return database;
 }
 
-void BitcoinExchange::queryDatabase(const std::string& filename) const
+void queryDatabase(const char* queryFile)
 {
+    // Load the database from the CSV file.
+    Database database = loadDatabase("data.csv");
+
     // Open the query file.
-    std::ifstream file(filename);
+    std::ifstream file(queryFile);
     if (!file.is_open())
         throw std::runtime_error("could not open file.");
 

@@ -5,7 +5,7 @@
 
 #include "RPN.hpp"
 
-int RPN::calculate(const std::string& expression)
+int calculate(const std::string& expression)
 {
     // Use a stack to store intermediate values.
     std::stack<int> stack;
